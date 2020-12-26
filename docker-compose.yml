@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  vuejs-app:
+    container_name: vuejs-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+
+#Docker Networks
+networks:
+  vuejs-network:
+    driver: bridge
