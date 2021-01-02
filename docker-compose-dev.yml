@@ -12,8 +12,6 @@ services:
       - ./src:/var/www
     working_dir: /var/www
     entrypoint: ['npm'] #can be overriden like this: docker-compose -f docker-compose-dev.yml run --entrypoint "vue --version" --rm vuejs-npm
-    # environment:
-    #   PATH: ${NODE_MODULE_PATH}
     networks:
       - vuejs-network
 

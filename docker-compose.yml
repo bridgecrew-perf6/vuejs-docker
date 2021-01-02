@@ -1,15 +1,36 @@
 version: '3'
-
 services:
-
-  vuejs-app:
-    container_name: vuejs-app
+  
+  #Node Service VueJS
+  vuejs-npm:
     build:
       context: .
       dockerfile: Dockerfile
+    image: vuejs_node_custom
+    container_name: vuejs-npm
+    volumes:
+      - ./src:/var/www
+    working_dir: /var/www
+    entrypoint: ['npm'] #can be overriden like this: docker-compose -f docker-compose-dev.yml run --entrypoint "vue --version" --rm vuejs-npm
+    networks:
+      - vuejs-network
+
+  #Nginx Service VueJS
+  vuejs-webserver:
+    image: nginx:1.18.0-alpine
+    container_name: vuejs-webserver
+    restart: always
+    tty: true
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - ./src:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - vuejs-npm
+    networks:
+      - vuejs-network
 
 #Docker Networks
 networks:

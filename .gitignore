@@ -11,4 +11,3 @@ gen
 # Other ignored files
 .env
 src/*
-!src/README.md
