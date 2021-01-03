@@ -1,21 +1,5 @@
 version: '3'
 services:
-  
-  #Node Service VueJS
-  vuejs-npm:
-    build:
-      context: .
-      dockerfile: Dockerfile-dev
-    image: vuejs_node_custom
-    container_name: vuejs-npm
-    volumes:
-      - ./src:/var/www
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    working_dir: /var/www
-    entrypoint: ['npm'] #can be overriden like this: docker-compose -f docker-compose-dev.yml run --entrypoint "vue --version" --rm vuejs-npm
-    networks:
-      - vuejs-network
 
   #Nginx Service VueJS
   vuejs-webserver:
@@ -28,8 +12,24 @@ services:
     volumes:
       - ./src:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - vuejs-network
+
+  #Node Service VueJS
+  vuejs-npm:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    image: vuejs_node_custom
+    container_name: vuejs-npm
+    volumes:
+      - ./src:/var/www
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    working_dir: /var/www
     depends_on:
-      - vuejs-npm
+      - vuejs-webserver
+    entrypoint: ['npm'] #can be overriden like this: docker-compose -f docker-compose-dev.yml run --entrypoint "vue --version" --rm vuejs-npm
     networks:
       - vuejs-network
 
