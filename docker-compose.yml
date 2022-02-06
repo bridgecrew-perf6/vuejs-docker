@@ -6,7 +6,7 @@ services:
     image: nginx:1.18.0-alpine
     container_name: vuejs-webserver
     restart: always
-    tty: true,
+    tty: true
     environment:
       VIRTUAL_HOST: ${VIRTUAL_HOST}
       LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
