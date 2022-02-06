@@ -6,7 +6,11 @@ services:
     image: nginx:1.18.0-alpine
     container_name: vuejs-webserver
     restart: always
-    tty: true
+    tty: true,
+    environment:
+      VIRTUAL_HOST: ${VIRTUAL_HOST}
+      LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
     ports:
       - "80:80"
       - "443:443"
@@ -14,7 +18,8 @@ services:
       - ./src:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
     networks:
-      - vuejs-network
+      - webproxy
+      - client-network
   
   #Node Service VueJS
   vuejs-npm:
@@ -30,9 +35,12 @@ services:
       - vuejs-webserver
     entrypoint: ['npm'] #can be overriden like this: docker-compose -f docker-compose-dev.yml run --entrypoint "vue --version" --rm vuejs-npm
     networks:
-      - vuejs-network
+      - client-network
 
 #Docker Networks
 networks:
-  vuejs-network:
+  webproxy:
+    external:
+      name: webproxy
+  client-network:
     driver: bridge
